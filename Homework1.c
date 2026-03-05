@@ -1,11 +1,5 @@
 #include "Homework1.h"
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <float.h>
-
 // float : [s|eeeeeeee|mmmmmmmmmmmmmmmmmmmmmmm] (1+8+23 = 32 bits)
 // double: [s|eeeeeeeeeee|mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm] (1+11+52 = 64 bits)
 
@@ -13,10 +7,6 @@
 // (a)
 uint32_t float_to_bits(float value)
 {
-    if (sizeof(float) != sizeof(uint32_t)) {
-        perror("float and uint32_t sizes do not match\n");
-        exit(1);
-    }
     uint32_t bits = {0};
     memcpy(&bits, &value, sizeof bits);
     return bits;
@@ -25,10 +15,6 @@ uint32_t float_to_bits(float value)
 // (b)
 uint64_t double_to_bits(double value)
 {
-    if (sizeof(double) != sizeof(uint64_t)) {
-        perror("double and uint64_t sizes do not match\n");
-        exit(1);
-    }
     uint64_t bits = {0};
     memcpy(&bits, &value, sizeof bits);
     return bits;

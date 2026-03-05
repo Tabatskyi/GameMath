@@ -1,10 +1,18 @@
 #pragma once
 
 #include <stdint.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <float.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+static_assert(sizeof(float) == sizeof(uint32_t), "float and uint32_t must be the same size");
+static_assert(sizeof(double) == sizeof(uint64_t), "double and uint64_t must be the same size");
 
 // 1)
 uint32_t float_to_bits(float value); // (a)
