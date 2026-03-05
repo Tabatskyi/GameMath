@@ -80,6 +80,25 @@ TEST(DoubleToBits, NaN) {
     EXPECT_NE(bits & MAN_MASK, 0ull);
 }
 
+// Shared values
+static constexpr float F_NORMAL = 1.0f;
+static constexpr float F_NEG = -1.0f;
+static constexpr float F_POS_INF = HUGE_VALF;
+static constexpr float F_NEG_INF = -HUGE_VALF;
+static constexpr float F_POS_ZERO = 0.0f;
+static constexpr float F_NEG_ZERO = -0.0f;
+static const float F_NAN = std::numeric_limits<float>::quiet_NaN();
+static const float F_SUBNORMAL = std::numeric_limits<float>::denorm_min();
+
+static constexpr double D_NORMAL = 1.0;
+static constexpr double D_NEG = -1.0;
+static constexpr double D_POS_INF = HUGE_VAL;
+static constexpr double D_NEG_INF = -HUGE_VAL;
+static constexpr double D_POS_ZERO = 0.0;
+static constexpr double D_NEG_ZERO = -0.0;
+static const double D_NAN = std::numeric_limits<double>::quiet_NaN();
+static const double D_SUBNORMAL = std::numeric_limits<double>::denorm_min();
+
 // (b) bits_to_float
 TEST(BitsToFloat, RoundTripOne) { 
     EXPECT_EQ(float_to_bits(bits_to_float(float_to_bits(1.0f))),
@@ -122,27 +141,7 @@ TEST(BitsToDouble, RoundTripNaN) {
     double_to_bits(D_NAN)); 
 }
 
-
 // 2)
-// Shared values
-static constexpr float F_NORMAL = 1.0f;
-static constexpr float F_NEG = -1.0f;
-static constexpr float F_POS_INF = HUGE_VALF;
-static constexpr float F_NEG_INF = -HUGE_VALF;
-static constexpr float F_POS_ZERO = 0.0f;
-static constexpr float F_NEG_ZERO = -0.0f;
-static const float F_NAN = std::numeric_limits<float>::quiet_NaN();
-static const float F_SUBNORMAL = std::numeric_limits<float>::denorm_min();
-
-static constexpr double D_NORMAL = 1.0;
-static constexpr double D_NEG = -1.0;
-static constexpr double D_POS_INF = HUGE_VAL;
-static constexpr double D_NEG_INF = -HUGE_VAL;
-static constexpr double D_POS_ZERO = 0.0;
-static constexpr double D_NEG_ZERO = -0.0;
-static const double D_NAN = std::numeric_limits<double>::quiet_NaN();
-static const double D_SUBNORMAL = std::numeric_limits<double>::denorm_min();
-
 // (a) is_finite
 TEST(FloatIsFinite, Normal) { EXPECT_TRUE(float_is_finite(F_NORMAL)); }
 TEST(FloatIsFinite, NegZero) { EXPECT_TRUE(float_is_finite(F_NEG_ZERO)); }
