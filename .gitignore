@@ -1,4 +1,5 @@
 .[Vv][Ss]/
+.vscode/
 /**/build/
 /**/CMakeLists.txt.user
 /**/CMakeCache.txt
