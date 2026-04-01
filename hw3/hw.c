@@ -20,6 +20,30 @@ double dot2(Vector2 a, Vector2 b) {
     return a.x * b.x + a.y * b.y;
 }
 
+double cross2(Vector2 a, Vector2 b) {
+    return (a.x * b.y) - (a.y * b.x);
+}
+
+Vector2 normalize2(Vector2 v) {
+    double magnitude = mag2(v);
+    if (double_is_zero(magnitude)) {
+        return (Vector2){0.0, 0.0};
+    }
+    return (Vector2){v.x / magnitude, v.y / magnitude};
+}
+
+Vector2 add2(Vector2 a, Vector2 b) {
+    return (Vector2){a.x + b.x, a.y + b.y};
+}
+
+Vector2 sub2(Vector2 a, Vector2 b) {
+    return (Vector2){a.x - b.x, a.y - b.y};
+}
+
+Vector2 scale2(Vector2 v, double scalar) {
+    return (Vector2){v.x * scalar, v.y * scalar};
+}
+
 void print_vector3(const char* label, Vector3 v) {
     printf("%s (%.15f, %.15f, %.15f)\n", label, v.x, v.y, v.z);
 }
@@ -67,6 +91,43 @@ void check_visibility(char* label, Vector2 a, Vector2 b) {
     printf("%s):\n", label);
     printf("Player -> Enemy: %.15f deg -> %s\n", angle_player, player_sees_enemy ? "YES" : "NO");
     printf("Enemy -> Player: %.15f deg -> %s\n", angle_enemy, enemy_sees_player ? "YES" : "NO");
+}
+
+bool ray_intersect(Vector2 origin, Vector2 direction, Vector2 A, Vector2 B, Vector2* out_hit) {
+    Vector2 r = direction;
+    Vector2 s = sub2(B, A);
+    Vector2 q_p = sub2(A, origin);
+    
+    double r_cross_s = cross2(r, s);
+    if (fabs(r_cross_s) < 1e-8) return false;
+    
+    double t = cross2(q_p, s) / r_cross_s;
+    double u = cross2(q_p, r) / r_cross_s;
+    
+    if (t > 0.0001 && u >= 0.0 && u <= 1.0) {
+        *out_hit = add2(origin, scale2(direction, t));
+        return true;
+    }
+    return false;
+}
+
+Vector2 facing_normal(Vector2 A, Vector2 B, Vector2 direction) {
+    Vector2 wall_vec = sub2(B, A);
+    Vector2 n1 = normalize2((Vector2){-wall_vec.y, wall_vec.x});
+    Vector2 n2 = normalize2((Vector2){wall_vec.y, -wall_vec.x});
+    return (dot2(direction, n1) < 0) ? n1 : n2;
+}
+
+Vector2 reflection(Vector2 directory, Vector2 normal) {
+    double dot = dot2(directory, normal);
+    Vector2 reflection = sub2(directory, scale2(normal, 2.0 * dot));
+    return normalize2(reflection);
+}
+
+double hit_angle(Vector2 directory, Vector2 normal) {
+    Vector2 norm_dir = normalize2(directory);
+    double dot = dot2(norm_dir, normal);
+    return 90.0 - (acos(fabs(dot)) * (180.0 / M_PI));
 }
 
 int main(void) {
@@ -142,5 +203,46 @@ int main(void) {
     check_visibility("e", (Vector2){+1.0, +0.0}, (Vector2){-1.0, +0.1});
     // f) 𝑎̅(+0.9, +0.1) and 𝑏̅(−0.9, −0.1)
     check_visibility("f", (Vector2){+0.9, +0.1}, (Vector2){-0.9, -0.1});
+
+    printf("\n(3)\n");
+    Vector2 A = {-3.0, -1.0}, B = {+4.0, +1.0}, C = {-1.0, +3.0}, S = {-2.0, +2.0}, D = {+1.0, -1.0}, hit1, hit2;
+    char* filename = "data.txt";
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        printf("Error opening file for writing.\n");
+        return 1;
+    }
+    fprintf(file, "A %.15f %.15f\n", A.x, A.y);
+    fprintf(file, "B %.15f %.15f\n", B.x, B.y);
+    fprintf(file, "C %.15f %.15f\n", C.x, C.y);
+    fprintf(file, "S %.15f %.15f\n", S.x, S.y);
+    fprintf(file, "D0 %.15f %.15f\n", D.x, D.y);
+    printf("--- Console Output ---\n");
+    if (ray_intersect(S, D, A, B, &hit1)) {
+        fprintf(file, "H1 %.15f %.15f\n", hit1.x, hit1.y);
+        
+        Vector2 n1 = facing_normal(A, B, D);
+        fprintf(file, "N1 %.15f %.15f\n", n1.x, n1.y);
+        printf("d) Normal 1: (%.15f, %.15f)\nb) Angle 1: %.15f deg\n", n1.x, n1.y, hit_angle(D, n1));
+        
+        Vector2 D1 = reflection(D, n1);
+        fprintf(file, "D1 %.15f %.15f\n", D1.x, D1.y);
+        printf("f) Direction 1: (%.15f, %.15f)\n", D1.x, D1.y);
+        
+        if (ray_intersect(hit1, D1, B, C, &hit2)) {
+            fprintf(file, "H2 %.15f %.15f\n", hit2.x, hit2.y);
+            
+            Vector2 n2 = facing_normal(B, C, D1);
+            fprintf(file, "N2 %.15f %.15f\n", n2.x, n2.y);
+            printf("e) Normal 2: (%.15f, %.15f)\nc) Angle 2: %.15f deg\n", n2.x, n2.y, hit_angle(D1, n2));
+            
+            Vector2 D2 = reflection(D1, n2);
+            fprintf(file, "D2 %.15f %.15f\n", D2.x, D2.y);
+            printf("g) Direction 2: (%.15f, %.15f)\n", D2.x, D2.y);
+        }
+    }
+    
+    fclose(file);
+    printf("Data dumped to %s successfully.\n", filename);
     return 0;
 }
