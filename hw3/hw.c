@@ -205,7 +205,8 @@ int main(void) {
     check_visibility("f", (Vector2){+0.9, +0.1}, (Vector2){-0.9, -0.1});
 
     printf("\n(3)\n");
-    Vector2 A = {-3.0, -1.0}, B = {+4.0, +1.0}, C = {-1.0, +3.0}, S = {-2.0, +2.0}, D = {+1.0, -1.0}, hit1, hit2;
+    Vector2 A = {-5, +2}, B = {+5, +4}, E = {+3, +4}, F = {+1, +8}, H = {+1, +5}, G={-3, +7}, D={-3, +5}, J = {-1,+8}, K = {-3, +9}, N = {+2, +8}, M={+4, +7}, hit1, hit2;
+    Vector2 C = add2(A, scale2(sub2(B, A), 0.5));
     char* filename = "data.txt";
     FILE *file = fopen(filename, "w");
     if (!file) {
@@ -215,10 +216,19 @@ int main(void) {
     fprintf(file, "A %.15f %.15f\n", A.x, A.y);
     fprintf(file, "B %.15f %.15f\n", B.x, B.y);
     fprintf(file, "C %.15f %.15f\n", C.x, C.y);
-    fprintf(file, "S %.15f %.15f\n", S.x, S.y);
-    fprintf(file, "D0 %.15f %.15f\n", D.x, D.y);
+    fprintf(file, "D %.15f %.15f\n", D.x, D.y);
+    fprintf(file, "E %.15f %.15f\n", E.x, E.y);
+    fprintf(file, "F %.15f %.15f\n", F.x, F.y);
+    fprintf(file, "H %.15f %.15f\n", H.x, H.y);
+    fprintf(file, "G %.15f %.15f\n", G.x, G.y);
+    fprintf(file, "J %.15f %.15f\n", J.x, J.y);
+    fprintf(file, "K %.15f %.15f\n", K.x, K.y);
+    fprintf(file, "N %.15f %.15f\n", N.x, N.y);
+    fprintf(file, "M %.15f %.15f\n", M.x, M.y);
+
+    // bullet fired from d to c, find all 2 hits
     printf("--- Console Output ---\n");
-    if (ray_intersect(S, D, A, B, &hit1)) {
+    if (ray_intersect(D, C, A, B, &hit1)) {
         fprintf(file, "H1 %.15f %.15f\n", hit1.x, hit1.y);
         
         Vector2 n1 = facing_normal(A, B, D);

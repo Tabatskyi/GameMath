@@ -196,9 +196,9 @@ FPClass float_classify(float value)
 
 FPClass double_classify(double value)
 {
-    if (double_is_nan(value))      return FP_CLASS_NAN;
-    if (double_is_inf(value))      return FP_CLASS_INFINITE;
-    if (double_is_zero(value))     return FP_CLASS_ZERO;
+    if (double_is_nan(value)) return FP_CLASS_NAN;
+    if (double_is_inf(value)) return FP_CLASS_INFINITE;
+    if (double_is_zero(value)) return FP_CLASS_ZERO;
     if (double_is_subnormal(value)) return FP_CLASS_SUBNORMAL;
     return FP_CLASS_NORMAL;
 }
@@ -369,3 +369,10 @@ bool double_greater(double a, double b)
     if (double_is_nan(a) || double_is_nan(b)) return false;
     return a > b;
 }
+
+// int main(void)
+// {
+//     printf("%.1000f\n", bits_to_double(0b1'01110110'011100101011001100110010010ull));
+//     printf("%.1000f\n", bits_to_double(0b1'00000000'011100000000000000000000000ull));
+//     return 0;
+// }
