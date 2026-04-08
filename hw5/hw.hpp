@@ -38,4 +38,6 @@ private:
             float _w, _x, _y, _z;
         };
     };
+
+    int no_w_mask = 0b1110'1111;
 };
