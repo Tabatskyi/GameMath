@@ -39,5 +39,5 @@ private:
         };
     };
 
-    int no_w_mask = 0b1110'1111;
+    static constexpr int no_w_mask = 0b1110'1111;
 };
