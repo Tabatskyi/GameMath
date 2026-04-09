@@ -29,7 +29,7 @@ elseif(CMAKE_C_COMPILER_VERSION VERSION_LESS "15")
 endif()
 
 add_library(gamemath_lib STATIC
-    Homework1.c
+    hw1.c
 )
 
 target_include_directories(gamemath_lib PUBLIC

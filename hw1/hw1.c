@@ -1,4 +1,4 @@
-#include "Homework1.h"
+#include "hw1.h"
 
 // float : [s|eeeeeeee|mmmmmmmmmmmmmmmmmmmmmmm] (1+8+23 = 32 bits)
 // double: [s|eeeeeeeeeee|mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm] (1+11+52 = 64 bits)

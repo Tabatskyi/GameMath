@@ -1,4 +1,4 @@
-#include "../Homework1.h"
+#include "../hw1.h"
 
 #include <gtest/gtest.h>
 #include <cmath>

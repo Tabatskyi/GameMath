@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
-#include "../hw1/Homework1.c"
+#include "../hw1/hw1.c"
 
 typedef struct {
     double x;
