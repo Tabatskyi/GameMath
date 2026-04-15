@@ -101,8 +101,3 @@ vector4& vector4::normalize()
     }
     return *this;
 }
-
-int main()
-{
-    return 0;
-}
